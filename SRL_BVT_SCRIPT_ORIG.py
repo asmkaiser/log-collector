@@ -29,9 +29,6 @@ COMMANDS = [
     "bash free -h"
 ]
 
-# ─────────────────────────────
-# CLEAN OUTPUT (FIXED)
-# ─────────────────────────────
 def clean_output(text, cmd):
     if not text:
         return ""
@@ -71,10 +68,6 @@ def extract_hostname(text):
     m = re.search(r'Hostname\s*:\s*(\S+)', text, re.I)
     return m.group(1) if m else None
 
-
-# ─────────────────────────────
-# MAIN APP
-# ─────────────────────────────
 class App:
     def __init__(self, root):
         self.root = root
@@ -89,9 +82,6 @@ class App:
 
         self.build_ui()
 
-    # ─────────────────────────────
-    # UI
-    # ─────────────────────────────
     def build_ui(self):
         self.header = tk.Frame(self.root, bg="#f5f5f5")
         self.header.pack(fill=tk.X)
@@ -160,9 +150,6 @@ class App:
         self.log = scrolledtext.ScrolledText(self.content, height=10)
         self.log.pack(fill=tk.BOTH)
 
-    # ─────────────────────────────
-    # FEATURES
-    # ─────────────────────────────
     def toggle_theme(self):
         self.dark_mode = not self.dark_mode
         bg = "#2b2b2b" if self.dark_mode else "white"
@@ -182,9 +169,6 @@ class App:
         self.log.see(tk.END)
         self.root.update()
 
-    # ─────────────────────────────
-    # START COLLECTION
-    # ─────────────────────────────
     def start(self):
         ips = re.split(r"[,\s]+", self.ip_text.get("1.0", tk.END))
         ips = [i for i in ips if "." in i]
@@ -204,9 +188,6 @@ class App:
             for ip in ips:
                 executor.submit(self.collect, ip, cmds)
 
-    # ─────────────────────────────
-    # COLLECT
-    # ─────────────────────────────
     def collect(self, ip, cmds):
         try:
             client = paramiko.SSHClient()
@@ -257,10 +238,6 @@ class App:
             self.progress["value"] += 1
             self.status.config(text=f"Success: {self.success}  Fail: {self.fail}")
 
-
-# ─────────────────────────────
-# RUN
-# ─────────────────────────────
 if __name__ == "__main__":
     root = tk.Tk()
     app = App(root)
